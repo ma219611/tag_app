@@ -24,28 +24,10 @@ class PostsController < ApplicationController
     @post_form.tag_name = @post.tags&.first&.tag_name
   end
 
-  # def update
-  #   binding.pry
-  #   @post_form = PostForm.new(update_post_form_params)
-
-  #   if @post_form.valid?
-  #     @post_form.update(update_post_form_params, @post)
-  #     redirect_to root_path
-  #   else
-  #     render :edit
-  #   end
-  # end
-
   def update
-
-    @update_params = params.require(:post_form).permit(:text, :tag_name, :image)
-    if @update_params[:image] == nil
-      @update_params = @update_params.merge(image: @post_attributes[:image].blob)
-    end
-
-    @post_form = PostForm.new(@update_params)
+    @post_form = PostForm.new(update_post_form_params)
     if @post_form.valid?
-      @post_form.update(@update_params, @post)
+      @post_form.update(update_post_form_params, @post)
       redirect_to root_path
     else
       render :edit
@@ -53,9 +35,22 @@ class PostsController < ApplicationController
   end
 
   private
+  def update_post_form_params
+    post_form_params = params.require(:post_form).permit(:text, :tag_name, :image)
+    # ストロングパラメーターのpost_form_paramsは呼び出せるものの、マージしたり諸々しようとするとエラーになったのでもう一度定義
+
+    # もしimageが空の場合はimageを代入する
+    unless post_form_params[:image]
+      post_form_params = post_form_params.merge(image: @post_attributes[:image].blob)
+      # blobつけないとエラーになるため
+
+    end
+    return post_form_params
+    # リターンしないとエラーになるため
+  end
+
   def post_form_params
     params.require(:post_form).permit(:text, :tag_name, :image)
-    # tagとimageの順番変える
   end
 
   def set_post
@@ -63,24 +58,8 @@ class PostsController < ApplicationController
   end
 
   def set_post_form
-    # @postの情報を取得し、@post_formとしてインスタンス生成し直す
     @post_attributes = @post.attributes
     @post_attributes[:image] = @post.image
     @post_form = PostForm.new(@post_attributes)
-
-    # メモeditの時だけ使えればOK、いやupdateでも画像の時に使う
-    # @を追加
   end
-
-  # def update_post_form_params
-  #   @post_form = params.require(:post_form).permit(:text, :tag_name, :image)
-  #   if @post_form[:image] == nil
-  #     @post_form.merge(image: @post_attributes[:image].blob)
-  #   end
-  # end
-      # 位置は一番最後に
-    # メソッド自体を追加
-    # 案レスがなぜかendと反応する
-    # blobを追加
-    # tagとimageの順番変える
 end
