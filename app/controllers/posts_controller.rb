@@ -62,5 +62,6 @@ class PostsController < ApplicationController
     @post_attributes = @post.attributes
     @post_attributes[:image] = @post.image
     @post_form = PostForm.new(@post_attributes)
+    # @をつける
   end
 end
