@@ -35,6 +35,11 @@ class PostsController < ApplicationController
   end
 
   private
+
+  def post_form_params
+    params.require(:post_form).permit(:text, :tag_name, :image)
+  end
+
   def update_post_form_params
     post_form_params = params.require(:post_form).permit(:text, :tag_name, :image)
     # ストロングパラメーターのpost_form_paramsは呼び出せるものの、マージしたり諸々しようとするとエラーになったのでもう一度定義
@@ -47,10 +52,6 @@ class PostsController < ApplicationController
     end
     return post_form_params
     # リターンしないとエラーになるため
-  end
-
-  def post_form_params
-    params.require(:post_form).permit(:text, :tag_name, :image)
   end
 
   def set_post
