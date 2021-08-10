@@ -25,9 +25,18 @@ class PostsController < ApplicationController
   end
 
   def update
-    @post_form = PostForm.new(update_post_form_params)
+    post_form_params = params.require(:post_form).permit(:text, :tag_name, :image)
+    # ↑これ無くしたい
+    binding.pry
+    # ↓画像だけ付け加えたい
+    unless post_form_params[:image]
+      post_form_params = post_form_params.merge(image: @post_attributes[:image].blob)
+      # blobつけないとエラーになるため
+    end
+    @post_form = PostForm.new(post_form_params)
+    
     if @post_form.valid?
-      @post_form.update(update_post_form_params, @post)
+      @post_form.update(post_form_params, @post)
       redirect_to root_path
     else
       render :edit
@@ -37,22 +46,22 @@ class PostsController < ApplicationController
   private
 
   def post_form_params
-    params.require(:post_form).permit(:text, :tag_name, :image)
-  end
-
-  def update_post_form_params
     post_form_params = params.require(:post_form).permit(:text, :tag_name, :image)
-    # ストロングパラメーターのpost_form_paramsは呼び出せるものの、マージしたり諸々しようとするとエラーになったのでもう一度定義
-
-    # もしimageが空の場合はimageを代入する
-    unless post_form_params[:image]
-      post_form_params = post_form_params.merge(image: @post_attributes[:image].blob)
-      # blobつけないとエラーになるため
-
-    end
     return post_form_params
-    # リターンしないとエラーになるため
   end
+
+  # def update_post_form_params
+  #   post_form_params = params.require(:post_form).permit(:text, :tag_name, :image)
+  #   # ストロングパラメーターのpost_form_paramsは呼び出せるものの、マージしたり諸々しようとするとエラーになったのでもう一度定義
+
+  #   # もしimageが空の場合はimageを代入する
+  #   unless post_form_params[:image]
+  #     post_form_params = post_form_params.merge(image: @post_attributes[:image].blob)
+  #     # blobつけないとエラーになるため
+  #   end
+  #   return post_form_params
+  #   # リターンしないとエラーになるため
+  # end
 
   def set_post
     @post = Post.find(params[:id])
