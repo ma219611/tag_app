@@ -1,6 +1,5 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update]
-  # before_action :set_post_form, only: [:edit]
 
   def index
     @posts = Post.all
@@ -23,22 +22,30 @@ class PostsController < ApplicationController
 
   # ToDo：関数として切り出すかどうか
   def edit
+    # @postの中身をハッシュとして取り出す
     post_attributes = @post.attributes
-    post_attributes[:image] = @post.image
+    # 画像とタグの情報を付け加える merge!とすると追加したもの自体でオブジェクトを更新する
+    post_attributes.merge!(image: @post.image, tag_name: @post.tags&.first&.tag_name)
+    # @post_formとしてインスタンス生成する
     @post_form = PostForm.new(post_attributes)
-    @post_form.tag_name = @post.tags&.first&.tag_name
   end
 
   # ToDo：関数として切り出すかどうか
   def update
+    post_attributes = @post.attributes
+    # 画像とタグの情報を付け加える merge!とすると追加したもの自体でオブジェクトを更新する
+    post_attributes.merge!(image: @post.image, tag_name: @post.tags&.first&.tag_name)
+    # @post_formとしてインスタンス生成する
+    @post_form = PostForm.new(post_attributes)
+    # paramsの情報を取得する
     params  = post_form_params
-    params = params.merge(image: @post.image.blob) unless params[:image]
-    # 変更点：paramsを代入
-    # 変更点：画象がない時は画像を代入
+    # paramsの情報に画象を追加する
+    params.merge!(image: @post.image.blob) unless params[:image]
     @post_form = PostForm.new(params)
 
-    # validの前に編集後の内容でインスタンス生成をするため
+    binding.pry
 
+    # validの前に編集後の内容でインスタンス生成をするため
     if @post_form.valid?
       @post_form.update(params, @post)
       redirect_to root_path
@@ -56,21 +63,4 @@ class PostsController < ApplicationController
     @post = Post.find(params[:id])
   end
 
-  # def set_post_form
-
-  # end
 end
-
-
-  # def update_post_form_params
-  #   post_form_params = params.require(:post_form).permit(:text, :tag_name, :image)
-  #   # ストロングパラメーターのpost_form_paramsは呼び出せるものの、マージしたり諸々しようとするとエラーになったのでもう一度定義
-
-  #   # もしimageが空の場合はimageを代入する
-  #   unless post_form_params[:image]
-  #     post_form_params = post_form_params.merge(image: @post_attributes[:image].blob)
-  #     # blobつけないとエラーになるため
-  #   end
-  #   return post_form_params
-  #   # リターンしないとエラーになるため
-  # end
