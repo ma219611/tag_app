@@ -10,8 +10,8 @@ class PostsController < ApplicationController
   end
 
   def create
-    binding.pry
     @post_form = PostForm.new(post_form_params)
+    binding.pry
     if @post_form.valid?
       @post_form.save
       redirect_to root_path
@@ -20,34 +20,23 @@ class PostsController < ApplicationController
     end
   end
 
-  # ToDo：関数として切り出すかどうか
   def edit
-    # @postの中身をハッシュとして取り出す
+    # @postから情報をハッシュとして取り出し、@post_formとしてインスタンス生成する
     post_attributes = @post.attributes
-    # 画像とタグの情報を付け加える merge!とすると追加したもの自体でオブジェクトを更新する
-    post_attributes.merge!(image: @post.image, tag_name: @post.tags&.first&.tag_name)
-    # @post_formとしてインスタンス生成する
     @post_form = PostForm.new(post_attributes)
+    # タグの情報は@postの中には含まれておらずattributesメソッドでは取得できないため、直接セットする
+    @post_form.tag_name = @post.tags&.first&.tag_name
   end
 
-  # ToDo：関数として切り出すかどうか
+
   def update
-    post_attributes = @post.attributes
-    # 画像とタグの情報を付け加える merge!とすると追加したもの自体でオブジェクトを更新する
-    post_attributes.merge!(image: @post.image, tag_name: @post.tags&.first&.tag_name)
-    # @post_formとしてインスタンス生成する
-    @post_form = PostForm.new(post_attributes)
-    # paramsの情報を取得する
-    params  = post_form_params
-    # paramsの情報に画象を追加する
-    params.merge!(image: @post.image.blob) unless params[:image]
-    @post_form = PostForm.new(params)
+    # paramsの内容を反映したインスタンスを生成する
+    @post_form = PostForm.new(post_form_params)
+    # 画象のデータはparamsとして送られてこないため、もし画像を洗濯し直していない=nilの場合は画像をセットする
+    @post_form.image ||= @post.image.blob
 
-    binding.pry
-
-    # validの前に編集後の内容でインスタンス生成をするため
     if @post_form.valid?
-      @post_form.update(params, @post)
+      @post_form.update(post_form_params, @post)
       redirect_to root_path
     else
       render :edit
