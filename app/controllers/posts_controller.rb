@@ -32,7 +32,7 @@ class PostsController < ApplicationController
   def update
     # paramsの内容を反映したインスタンスを生成する
     @post_form = PostForm.new(post_form_params)
-    # 画象のデータはparamsとして送られてこないため、もし画像を洗濯し直していない=nilの場合は画像をセットする
+    # 画象のデータはparamsとして送られてこないため、もし画像を選択し直していない=nilの場合は画像をセットする
     @post_form.image ||= @post.image.blob
 
     if @post_form.valid?
