@@ -24,15 +24,14 @@ class PostsController < ApplicationController
     # @postから情報をハッシュとして取り出し、@post_formとしてインスタンス生成する
     post_attributes = @post.attributes
     @post_form = PostForm.new(post_attributes)
-    # タグの情報は@postの中には含まれておらずattributesメソッドでは取得できないため、直接セットする
-    @post_form.tag_name = @post.tags&.first&.tag_name
   end
 
 
   def update
     # paramsの内容を反映したインスタンスを生成する
     @post_form = PostForm.new(post_form_params)
-    # 画象のデータはparamsとして送られてこないため、もし画像を選択し直していない=nilの場合は画像をセットする
+
+    # 画像を選択し直していない場合は、既存の画像をセットする
     @post_form.image ||= @post.image.blob
 
     if @post_form.valid?
@@ -45,7 +44,7 @@ class PostsController < ApplicationController
 
   private
   def post_form_params
-    params.require(:post_form).permit(:text, :tag_name, :image)
+    params.require(:post_form).permit(:text, :image)
   end
 
   def set_post

@@ -4,8 +4,7 @@ class PostForm
   ## PostFormクラスのオブジェクトがPostモデルの属性を扱えるようにする
   attr_accessor(
     :text, :image,
-    :id, :created_at, :datetime, :updated_at, :datetime,
-    :tag_name
+    :id, :created_at, :datetime, :updated_at, :datetime
    )
 
   with_options presence: true do
@@ -14,26 +13,12 @@ class PostForm
   end
 
   def save
-    post = Post.create(text: text, image: image)
-    tag = Tag.where(tag_name: tag_name).first_or_initialize
-    tag.save
-    PostTagRelation.create(post_id: post.id, tag_id: tag.id)
+    Post.create(text: text, image: image)
   end
 
   def update(params, post)
-    #一度タグの紐付けを消す
-    post.post_tag_relations.destroy_all
-
-    #paramsからタグを消す、タグの返り値を変数に代入。タグがなければnilが返り値
-    tag_name = params.delete(:tag_name)
-
-    #もしタグがすでにあれば情報を取得、なければインスタンス生成
-    tag = Tag.where(tag_name: tag_name).first_or_initialize if tag_name.present?
-
-    #もしタグが存在していればタグを保存
-    tag.save if tag_name.present?
-
+    # post_form_paramsをparamsとして受け取る
+    # @postをpostとして受け取る
     post.update(params)
-    PostTagRelation.create(post_id: post.id, tag_id: tag.id) if tag_name.present?
   end
 end
