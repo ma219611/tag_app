@@ -9,8 +9,8 @@
 |洗い出した要件|[要件定義を記載したシート](http://00.00.000.000/)|
 |実装した機能についての画像やGIFおよびその説明|実装した機能について、それぞれどのような特徴があるのかを列挙する形で記述。画像はGyazoで、GIFはGyazoGIFで撮影すること。|
 |実装予定の機能|現在、検索機能を実装中。今後は、ログイン時のSNS認証機能やSNSでの共有機能の実装を予定している。|
-|データベース設計|[![Image from Gyazo](https://i.gyazo.com/21e2f0d2d056b724cfe1b4933e1ab5f3.png)](https://gyazo.com/21e2f0d2d056b724cfe1b4933e1ab5f3)|
-|画面遷移図|[![Image from Gyazo](https://i.gyazo.com/b7bf1eabb85caa086bebfdbd254ab236.png)](https://gyazo.com/b7bf1eabb85caa086bebfdbd254ab236)|
+|データベース設計|[![Image from Gyazo](https://i.gyazo.com/7dc4195707754654696174e88cc3e476.png)](https://gyazo.com/7dc4195707754654696174e88cc3e476)|
+|画面遷移図|[![Image from Gyazo](https://i.gyazo.com/e9c847eb5919d917844fcc65bce26feb.png)](https://gyazo.com/e9c847eb5919d917844fcc65bce26feb)|
 |開発環境|・フロントエンド：HTML,CSS / JavaScript<br>・バックエンド：Ruby（ver 2.5.1） / Ruby on Rails（ver 6.0.4）<br>・インフラ：AWS（EC2 / S3）, Nginx, MySQL<br>・テスト：RSpec<br>・テキストエディタ：Visual Studio Code<br>・タスク管理：GitHubプロジェクトボード|
 |ローカルでの動作方法|以下、コマンドを順に実行してください。<br>% git clone https://github.com/xxxxxxxx<br>% cd xxxxxxxx<br>% bundle install<br>% yarn install
 ```|
