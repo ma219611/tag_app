@@ -12,7 +12,6 @@
 |実装予定の機能|現在、検索機能を実装中。今後は、ログイン時のSNS認証機能やSNSでの共有機能の実装を予定している。|
 |データベース設計|ER図を添付。|
 |画面遷移図|画面遷移図を添付。|
-|使用した言語|フロントエンド：HTML,CSS / JavaScript<br>バックエンド：Ruby（2.5.1） / Ruby on Rails（6.0.4）<br>インフラ：AWS（EC2 / S3）, Nginx, MySQL<br>単体テスト・結合テスト：RSpec。|
-|ローカルでの動作方法|```bash
-git clone https://github.com/xxxxxxxx<br>cd xxxxxxxx<br>bundle install<br>yarn install
+|使用した言語|フロントエンド：HTML,CSS / JavaScript<br>バックエンド：Ruby（ver 2.5.1） / Ruby on Rails（ver 6.0.4）<br>インフラ：AWS（EC2 / S3）, Nginx, MySQL<br>テスト：RSpec|
+|ローカルでの動作方法|以下、コマンドを順に実行してください。<br>% git clone https://github.com/xxxxxxxx<br>% cd xxxxxxxx<br>% bundle install<br>% yarn install
 ```|
